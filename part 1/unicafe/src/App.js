@@ -2,6 +2,34 @@ import React, { useState } from "react";
 
 const Button = ({ handleClick, text }) => <button onClick={handleClick}>{text}</button>;
 
+const Statistic = (props) => {
+    return (
+        <tr>
+            <td>{props.name}</td>
+            <td>{props.value}</td>
+        </tr>
+    );
+};
+
+const Statistics = ({ good, bad, neutral, total }) => {
+    if (total === 0) {
+        return (
+            <div>
+                <p>No feedback given</p>
+            </div>
+        );
+    }
+    return (
+        <table>
+            <Statistic name="neutral" value={neutral} />
+            <Statistic name="bad" value={bad} />
+            <Statistic name="total" value={total} />
+            <Statistic name="average" value={good - bad / total} />
+            <Statistic name="positive" value={(good / total) * 100} />
+        </table>
+    );
+};
+
 const App = () => {
     // save clicks of each button to its own state
     const [good, setGood] = useState(0);
@@ -32,12 +60,7 @@ const App = () => {
             <Button handleClick={handleBadClick} text="bad" />
 
             <h1>statistics</h1>
-            <p>good {good}</p>
-            <p>neutral {neutral}</p>
-            <p>bad {bad}</p>
-            <p>all {total}</p>
-            <p>average {good - bad / total}</p>
-            <p>positive {(good / total) * 100} %</p>
+            <Statistics good={good} neutral={neutral} bad={bad} total={total} />
         </div>
     );
 };
