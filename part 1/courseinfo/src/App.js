@@ -3,7 +3,7 @@ import React from "react";
 const Header = (props) => {
     return (
         <div>
-            <h1>{props.title}</h1>
+            <h1>{props.name}</h1>
         </div>
     );
 };
@@ -11,7 +11,7 @@ const Header = (props) => {
 const Part = (props) => {
     return (
         <p>
-            {props.part} {props.exercises}
+            {props.name} {props.excercises}
         </p>
     );
 };
@@ -19,18 +19,28 @@ const Part = (props) => {
 const Content = (props) => {
     return (
         <div>
-            <Part part={props.parts[0].name} excercise={props.parts[0].exercises} />
-            <Part part={props.parts[1].name} excercise={props.parts[1].exercises} />
-            <Part part={props.parts[2].name} excercise={props.parts[2].exercises} />
+            <Part name={props.parts[0].name} excercises={props.parts[0].exercises} />
+            <Part name={props.parts[1].name} excercises={props.parts[1].exercises} />
+            <Part name={props.parts[2].name} excercises={props.parts[2].exercises} />
         </div>
     );
 };
 
 const Total = (props) => {
     return (
-        <div>
-            <p>Number of exercises {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises}</p>
-        </div>
+        <p>
+            <b>total of {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises} exercises</b>
+        </p>
+    );
+};
+
+const Course = ({ course }) => {
+    return (
+        <>
+            <Header name={course.name} />
+            <Content parts={course.parts} />
+            <Total parts={course.parts} />
+        </>
     );
 };
 
@@ -52,11 +62,10 @@ const App = () => {
             },
         ],
     };
+
     return (
         <div>
-            <Header title={course.name} />
-            <Content parts={course.parts} />
-            <Total parts={course.parts} />
+            <Course course={course} />
         </div>
     );
 };
