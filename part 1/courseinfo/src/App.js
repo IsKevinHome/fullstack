@@ -9,19 +9,20 @@ const Header = (props) => {
 };
 
 const Part = (props) => {
-    return (
-        <p>
-            {props.name} {props.excercises}
-        </p>
-    );
+    return <p>{props.name}</p>;
 };
 
 const Content = (props) => {
     return (
         <div>
-            <Part name={props.parts[0].name} excercises={props.parts[0].exercises} />
-            <Part name={props.parts[1].name} excercises={props.parts[1].exercises} />
-            <Part name={props.parts[2].name} excercises={props.parts[2].exercises} />
+            <Part
+                name={props.parts.map((course) => (
+                    <p>
+                        {" "}
+                        {course.name} {course.exercises}{" "}
+                    </p>
+                ))}
+            />
         </div>
     );
 };
@@ -46,28 +47,28 @@ const Course = ({ course }) => {
 
 const App = () => {
     const course = {
+        id: 1,
         name: "Half Stack application development",
         parts: [
             {
                 name: "Fundamentals of React",
                 exercises: 10,
+                id: 1,
             },
             {
                 name: "Using props to pass data",
                 exercises: 7,
+                id: 2,
             },
             {
                 name: "State of a component",
                 exercises: 14,
+                id: 3,
             },
         ],
     };
 
-    return (
-        <div>
-            <Course course={course} />
-        </div>
-    );
+    return <Course course={course} />;
 };
 
 export default App;
