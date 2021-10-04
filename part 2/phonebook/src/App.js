@@ -4,34 +4,32 @@ import Person from "./components/Person";
 const App = (props) => {
     const [persons, setPersons] = useState(props.persons);
     const [newName, setNewName] = useState("Enter a new name");
+    const [newNumber, setNewNumber] = useState("Enter a new number");
 
-    const handleTextChange = (event) => {
+    const handleTextChangeName = (event) => {
         setNewName(event.target.value);
+    };
+
+    const handleTextChangeNumber = (event) => {
+        setNewNumber(event.target.value);
     };
 
     const addPerson = (event) => {
         event.preventDefault();
         const personObject = {
             name: newName,
+            number: newNumber,
         };
+        // Conditional, boolean value
         const isFound = persons.some((person) => person.name.toLowerCase() === newName.toLowerCase());
+        // that way we can use ! to check if it's true or not.
         if (!isFound) {
             setPersons(persons.concat(personObject));
-            setNewName("Enter another name");
+            setNewName("");
+            setNewNumber("");
         } else {
             alert(`${newName} is already added to phonebook`);
         }
-        // for (let i = 0; i < persons.length; i++) {
-        //     if (persons[i].name === newName) {
-        //         console.log("duplicate");
-        //         break;
-        //     } else {
-        //         setPersons(persons.concat(personObject));
-        //         setNewName("Enter another name");
-        //         console.log("added");
-        //         break;
-        //     }
-        // }
     };
 
     return (
@@ -39,7 +37,10 @@ const App = (props) => {
             <h2>Phonebook</h2>
             <form onSubmit={addPerson}>
                 <div>
-                    name: <input value={newName} onChange={handleTextChange} />
+                    name: <input value={newName} onChange={handleTextChangeName} />
+                </div>
+                <div>
+                    number: <input value={newNumber} onChange={handleTextChangeNumber} />
                 </div>
                 <div>
                     <button type="submit">add</button>
