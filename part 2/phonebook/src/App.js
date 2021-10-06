@@ -22,17 +22,12 @@ const App = (props) => {
     };
 
     const handleFiltering = (event) => {
-        console.log(event.target.value);
-        // We get the value, and change it to what we're filtering through.
         setFilterBy(event.target.value);
-        // Set this false, so that it disables showing all of our contacts
         setShowAll(false);
-        console.log(filterBy);
     };
 
     const addContact = (event) => {
         event.preventDefault();
-        //
         if (newName === "") return true;
         if (newNumber === "") return true;
 
@@ -55,7 +50,22 @@ const App = (props) => {
         }
     };
 
-    const persons = contacts.map((person) => <Person person={person} />);
+    const rows = () => {
+        console.log(filterBy);
+        const contactsToShow = showAll
+            ? contacts
+            : contacts.filter((contact) => {
+                  const c = contact.name.toUpperCase();
+                  const filter = filterBy.toUpperCase();
+                  return c.search(filter) !== -1;
+              });
+        const contactsRender = contactsToShow.map((contact) => {
+            console.log(contact);
+            return <Person key={contact.name} person={contact} />;
+        });
+
+        return contactsRender;
+    };
 
     return (
         <div>
@@ -74,8 +84,8 @@ const App = (props) => {
                     <button type="submit">add</button>
                 </div>
             </form>
-            <h2>Numbers</h2>
-            <ul>{persons}</ul>
+            <h2>Contacts</h2>
+            <ul>{rows()}</ul>
         </div>
     );
 };
