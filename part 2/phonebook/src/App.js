@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Person from "./components/Person";
 
 const App = (props) => {
     const [contacts, setContacts] = useState([
@@ -72,7 +71,7 @@ const App = (props) => {
             <h2>Phonebook</h2>
             Filter:
             <input value={filterBy} onChange={handleFiltering} />
-            <h2>Add a new</h2>
+            <h2>Add a new Contact</h2>
             <form onSubmit={addContact}>
                 <div>
                     name: <input value={newName} onChange={handleContactNameChange} />
