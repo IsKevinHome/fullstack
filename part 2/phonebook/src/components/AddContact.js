@@ -1,5 +1,4 @@
 import React from "react";
-
 const AddContact = ({ addContact, newName, newNumber, handleContactNameChange, handleContactNumberChange }) => {
     return (
         <div>
