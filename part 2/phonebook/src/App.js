@@ -1,20 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Person from "./components/Person";
 import AddContact from "./components/AddContact";
 import SearchContacts from "./components/SearchContacts";
 import RenderContacts from "./components/RenderContacts";
+import axios from "axios";
 
-const App = (props) => {
-    const [contacts, setContacts] = useState([
-        { name: "Guy Fieri", number: "020-4837473" },
-        { name: "Gordon Ramsay", number: "75749483832" },
-        { name: "Mr. Tasty", number: "43-4982839" },
-        { name: "Dude man", number: "11-33-448382" },
-    ]);
+const App = () => {
+    const [contacts, setContacts] = useState([]);
     const [newName, setNewName] = useState("");
     const [newNumber, setNewNumber] = useState("");
     const [showAll, setShowAll] = useState(true);
     const [filterBy, setFilterBy] = useState("");
+
+    useEffect(() => {
+        console.log("effect");
+        axios.get("http://localhost:3001/persons").then((response) => {
+            console.log("promise fulfilled");
+            setContacts(response.data);
+        });
+    }, []);
+
+    console.log("render", contacts.length, "contacts");
 
     const handleContactNameChange = (event) => {
         setNewName(event.target.value);
@@ -56,7 +62,6 @@ const App = (props) => {
     };
 
     const rows = () => {
-        console.log(filterBy);
         const contactsToShow = showAll
             ? contacts
             : contacts.filter((contact) => {
