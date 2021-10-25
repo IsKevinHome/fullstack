@@ -5,7 +5,7 @@ const Filter = ({ filterBy, handleFiltering }) => {
         <div>
             <div>
                 <label>countries: </label>
-                <input value={filterBy} onChange={handleFiltering} />
+                Filter <input value={filterBy} onChange={handleFiltering} />
             </div>
         </div>
     );
