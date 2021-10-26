@@ -1,0 +1,16 @@
+{
+  "name": "backend",
+  "version": "0.0.1",
+  "description": "\"backend for phonebook\"",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+
+    "test": "\"echo \\\"error: no test specified\\\" && exit 1\""
+  },
+  "author": "\"Kevin Muhlbach\"",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
