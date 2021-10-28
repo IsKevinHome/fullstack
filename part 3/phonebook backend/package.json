@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-
     "test": "\"echo \\\"error: no test specified\\\" && exit 1\""
   },
   "author": "\"Kevin Muhlbach\"",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "morgan": "^1.10.0"
   }
 }

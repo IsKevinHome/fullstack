@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-app.use(express.json());
+const morgan = require("morgan");
 
 let contacts = [
     {
@@ -24,6 +24,23 @@ let contacts = [
         number: "39-23-6423122",
     },
 ];
+
+// Middleware
+const requestLogger = (request, response, next) => {
+    console.log("Method:", request.method);
+    console.log("Path:  ", request.path);
+    console.log("Body:  ", request.body);
+    console.log("---");
+    next();
+};
+
+app.use(express.json());
+app.use(requestLogger);
+morgan.token("response-body", (req, res) => {
+    return JSON.stringify(req.body);
+});
+
+app.use(morgan(":method :url :response-time :response-body")); //include newly defined ':response-body' token
 
 app.get("/info", (req, res) => {
     var date = new Date();
@@ -79,6 +96,12 @@ app.delete("/api/persons/:id", (request, response) => {
     console.log(contacts);
     response.status(204).end();
 });
+
+const unknownEndpoint = (request, response) => {
+    response.status(404).send({ error: "unknown endpoint" });
+};
+
+app.use(unknownEndpoint);
 
 const PORT = 3001;
 app.listen(PORT, () => {
