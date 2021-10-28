@@ -1,9 +1,8 @@
-const { response } = require("express");
 const express = require("express");
 const app = express();
 app.use(express.json());
 
-const contacts = [
+let contacts = [
     {
         id: 1,
         name: "Arto Hellas",
@@ -26,12 +25,10 @@ const contacts = [
     },
 ];
 
-
-
 app.get("/info", (req, res) => {
     var date = new Date();
-    res.send(`<div>Phonebook has info for ${contacts.length} people</div> <p>${date}</p>`)
-})
+    res.send(`<div>Phonebook has info for ${contacts.length} people</div> <p>${date}</p>`);
+});
 
 app.get("/api/persons", (request, response) => {
     response.json(contacts);
@@ -46,6 +43,41 @@ app.get("/api/persons/:id", (request, response) => {
     } else {
         response.status(404).end();
     }
+});
+
+const generateId = () => {
+    return Math.floor(Math.random() * 10000);
+};
+
+//POST
+app.post("/api/persons", (request, response) => {
+    const body = request.body;
+
+    const person = {
+        name: body.name,
+        number: body.number,
+        id: generateId(),
+    };
+
+    if (!body.name) {
+        return response.status(400).json({ error: "the name field is missing" });
+    }
+
+    if (contacts.find((person) => person.name === body.name)) {
+        return response.status(400).json({ error: "the name must be unique" });
+    }
+
+    contacts = contacts.concat(person);
+    response.json(person);
+});
+
+// DELETE
+app.delete("/api/persons/:id", (request, response) => {
+    const id = Number(request.params.id);
+    console.log(id);
+    contacts = contacts.filter((person) => person.id !== id);
+    console.log(contacts);
+    response.status(204).end();
 });
 
 const PORT = 3001;
