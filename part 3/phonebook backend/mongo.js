@@ -20,7 +20,7 @@ const contactSchema = new mongoose.Schema({
     number: String,
 });
 
-const Contact = mongoose.model("Note", contactSchema);
+const Contact = mongoose.model("Contact", contactSchema);
 
 const contact = new Contact({
     id: generateId(),

@@ -1,8 +1,15 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+require("dotenv").config();
+const Contact = require("./models/contact");
 
 // Middleware
+
+app.use(cors());
+app.use(express.json());
+app.use(express.static("build"));
+
 const requestLogger = (request, response, next) => {
     console.log("Method:", request.method);
     console.log("Path:  ", request.path);
@@ -11,33 +18,7 @@ const requestLogger = (request, response, next) => {
     next();
 };
 
-app.use(cors());
-app.use(express.json());
 app.use(requestLogger);
-app.use(express.static("build"));
-
-let contacts = [
-    {
-        id: 1,
-        name: "Arto Hellas",
-        number: "040-123456",
-    },
-    {
-        id: 2,
-        name: "Ada Lovelace",
-        number: "39-44-5323523",
-    },
-    {
-        id: 3,
-        name: "Dan Abramov",
-        number: "12-43-234345",
-    },
-    {
-        id: 4,
-        name: "Mary Poppendieck",
-        number: "39-23-6423122",
-    },
-];
 
 app.get("/info", (req, res) => {
     var date = new Date();
@@ -45,18 +26,24 @@ app.get("/info", (req, res) => {
 });
 
 app.get("/api/persons", (request, response) => {
-    response.json(contacts);
+    Contact.find({}).then((person) => {
+        response.json(person);
+    });
 });
 
 app.get("/api/persons/:id", (request, response) => {
-    const id = Number(request.params.id);
-    const person = contacts.find((person) => person.id === id);
-
-    if (person) {
-        response.json(person);
-    } else {
-        response.status(404).end();
-    }
+    Contact.findById(request.params.id)
+        .then((contact) => {
+            if (contact) {
+                response.json(contact);
+            } else {
+                response.status(404).end();
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            response.status(400).send({ error: "malformatted id" });
+        });
 });
 
 const generateId = () => {
@@ -66,31 +53,27 @@ const generateId = () => {
 //POST
 app.post("/api/persons", (request, response) => {
     const body = request.body;
+    console.log(body);
 
-    const person = {
+    if (body.name === undefined) {
+        return response.status(400).json({ error: "content missing" });
+    }
+
+    const contact = new Contact({
+        id: generateId(),
         name: body.name,
         number: body.number,
-        id: generateId(),
-    };
+    });
 
-    if (!body.name) {
-        return response.status(400).json({ error: "the name field is missing" });
-    }
-
-    if (contacts.find((person) => person.name === body.name)) {
-        return response.status(400).json({ error: "the name must be unique" });
-    }
-
-    contacts = contacts.concat(person);
-    response.json(person);
+    contact.save().then((savedContact) => {
+        response.json(savedContact);
+    });
 });
 
 // DELETE
 app.delete("/api/persons/:id", (request, response) => {
     const id = Number(request.params.id);
-    console.log(id);
-    contacts = contacts.filter((person) => person.id !== id);
-    console.log(contacts);
+    contacts = contacts.filter((contact) => contact.id !== id);
     response.status(204).end();
 });
 
