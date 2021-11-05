@@ -8,3 +8,6 @@ content-type: application/json
 
 ###
 GET http://localhost:3001/api/persons
+
+###
+DELETE http://localhost:3001/api/persons/61858f074ab653c39c60d335
