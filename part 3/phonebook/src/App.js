@@ -80,10 +80,7 @@ const App = () => {
     return (
         <div>
             <h1>Phonebook</h1>
-            <SearchContacts
-                filterBy={filterBy}
-                handleFiltering={handleFiltering}
-            />
+            <SearchContacts filterBy={filterBy} handleFiltering={handleFiltering} />
             <AddContact
                 addContact={addContact}
                 newName={newName}
