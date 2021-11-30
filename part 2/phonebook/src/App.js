@@ -3,7 +3,7 @@ import Person from "./components/Person";
 import AddContact from "./components/AddContact";
 import SearchContacts from "./components/SearchContacts";
 import RenderContacts from "./components/RenderContacts";
-import contactService from "./services/contacts";
+import axios from "axios";
 
 const App = () => {
     const [contacts, setContacts] = useState([]);
@@ -13,7 +13,9 @@ const App = () => {
     const [filterBy, setFilterBy] = useState("");
 
     useEffect(() => {
-        contactService.getAll().then((response) => {
+        console.log("effect");
+        axios.get("http://localhost:3001/persons").then((response) => {
+            console.log("promise fulfilled");
             setContacts(response.data);
         });
     }, []);
@@ -51,11 +53,9 @@ const App = () => {
                 number: newNumber,
             };
 
-            contactService.create(contactObject).then((response) => {
-                setContacts(contacts.concat(response.data));
-                setNewName("");
-                setNewNumber("");
-            });
+            setContacts([...contacts, contactObject]);
+            setNewName("");
+            setNewNumber("");
         } else {
             alert(`${newName} is already added to phonebook`);
         }
@@ -79,18 +79,9 @@ const App = () => {
 
     return (
         <div>
-            <h1>Phonebook</h1>
-            <SearchContacts
-                filterBy={filterBy}
-                handleFiltering={handleFiltering}
-            />
-            <AddContact
-                addContact={addContact}
-                newName={newName}
-                newNumber={newNumber}
-                handleContactNameChange={handleContactNameChange}
-                handleContactNumberChange={handleContactNumberChange}
-            />
+            <h2>Phonebook</h2>
+            <SearchContacts filterBy={filterBy} handleFiltering={handleFiltering} />
+            <AddContact addContact={addContact} newName={newName} newNumber={newNumber} handleContactNameChange={handleContactNameChange} handleContactNumberChange={handleContactNumberChange} />
             <RenderContacts renderContacts={rows()} />
         </div>
     );

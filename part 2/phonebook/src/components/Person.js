@@ -1,11 +1,10 @@
 import React from "react";
 
-const Person = ({ person, deletePerson }) => {
+const Person = ({ person }) => {
     return (
-        <li>
+        <p>
             {person.name} {person.number}
-            {/* <button onClick={deletePerson}>delete</button> */}
-        </li>
+        </p>
     );
 };
 
